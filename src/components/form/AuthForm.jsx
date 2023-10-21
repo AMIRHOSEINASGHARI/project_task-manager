@@ -1,9 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 
 const AuthForm = ({ type }) => {
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChangeInput = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   //TODO: submit form
   const handleSubmit = (e) => {};
 
@@ -32,12 +45,16 @@ const AuthForm = ({ type }) => {
           <input
             type="email"
             name="email"
+            value={form.email}
+            onChange={handleChangeInput}
             placeholder="Email"
             className="w-full bg-white border rounded-md px-3 py-2 placeholder:text-black placeholder:font-semibold placeholder:text-sm font-semibold text-sm"
           />
           <input
             type="password"
             name="password"
+            value={form.password}
+            onChange={handleChangeInput}
             placeholder="Password"
             className="w-full bg-white border rounded-md px-3 py-2 placeholder:text-black placeholder:font-semibold placeholder:text-sm font-semibold text-sm"
           />
