@@ -1,14 +1,35 @@
 "use client";
 
-import Link from "next/link";
+//* React
 import { useState } from "react";
+//* Next
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+//* React Icons
 import { FcGoogle } from "react-icons/fc";
+//* Firebase
+import { auth } from "@/firebase";
+//* Firebase-hooks
+import {
+  useSignInWithGoogle,
+  useCreateUserWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 
 const AuthForm = ({ type }) => {
+  const router = useRouter();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+  const [signInWithGoogle, googleUser, googleLoading, googleError] =
+    useSignInWithGoogle(auth);
+  const [
+    createUserWithEmailAndPassword,
+    emailUserRegister,
+    emailLoadingRegister,
+    emailErrorRegister,
+  ] = useCreateUserWithEmailAndPassword(auth);
 
   const handleChangeInput = (e) => {
     setForm({
@@ -17,11 +38,26 @@ const AuthForm = ({ type }) => {
     });
   };
 
-  //TODO: submit form
-  const handleSubmit = (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    //* REGISTER AUTH
+    if (type === "register") {
+      try {
+        const newUser = await createUserWithEmailAndPassword(
+          form.email,
+          form.password
+        );
+        if (newUser) router.push("/");
+        if (!newUser) alert(emailErrorRegister);
+      } catch (error) {
+        alert(error);
+      }
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen relative">
       <form
         className="w-[280px] sm:w-[350px] md:w-[400px] flex flex-col items-center"
         onSubmit={handleSubmit}
@@ -29,6 +65,7 @@ const AuthForm = ({ type }) => {
         <h1 className="text-5xl font-black text-gray-600 mb-10">Welcome</h1>
         <button
           type="button"
+          onClick={() => signInWithGoogle()}
           className="flex items-center justify-center gap-3 rounded-md shadow-md shadow-gray-200 py-2 w-full"
         >
           <FcGoogle />
@@ -61,7 +98,12 @@ const AuthForm = ({ type }) => {
         </div>
         <button
           type="submit"
-          className="font-semibold text-sm bg-black text-white w-full rounded-md py-2 mb-5"
+          disabled={emailLoadingRegister}
+          className={`font-semibold text-sm w-full rounded-md py-2 mb-5 ${
+            emailLoadingRegister
+              ? "bg-gray-100 text-gray-500"
+              : "bg-black text-white"
+          }`}
         >
           {type === "register" ? "Sign up" : "Log in"}
         </button>
