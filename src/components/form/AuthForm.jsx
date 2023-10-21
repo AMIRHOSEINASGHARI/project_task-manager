@@ -15,6 +15,7 @@ import {
   useCreateUserWithEmailAndPassword,
   useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
+import toast from "react-hot-toast";
 
 const AuthForm = ({ type }) => {
   const router = useRouter();
@@ -49,6 +50,8 @@ const AuthForm = ({ type }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!form.email || !form.password) return toast.error("Enter valid data");
+
     //* REGISTER AUTH
     if (type === "register") {
       try {
@@ -57,9 +60,9 @@ const AuthForm = ({ type }) => {
           form.password
         );
         if (newUser) router.push("/");
-        if (!newUser) alert(emailErrorRegister);
+        if (!newUser) toast.error(emailErrorRegister);
       } catch (error) {
-        alert(error.message);
+        toast.error(error.message);
       }
     }
 
@@ -70,9 +73,9 @@ const AuthForm = ({ type }) => {
           form.email,
           form.password
         );
-        console.log(loginResult);
+        if (!loginResult) toast.error(emailErrorLogin.message);
       } catch (error) {
-        alert(error);
+        toast.error(emailErrorLogin.message);
       }
     }
   };
