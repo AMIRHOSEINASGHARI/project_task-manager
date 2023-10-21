@@ -13,6 +13,7 @@ import { auth } from "@/firebase";
 import {
   useSignInWithGoogle,
   useCreateUserWithEmailAndPassword,
+  useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
 
 const AuthForm = ({ type }) => {
@@ -24,12 +25,19 @@ const AuthForm = ({ type }) => {
 
   const [signInWithGoogle, googleUser, googleLoading, googleError] =
     useSignInWithGoogle(auth);
+
   const [
     createUserWithEmailAndPassword,
     emailUserRegister,
     emailLoadingRegister,
     emailErrorRegister,
   ] = useCreateUserWithEmailAndPassword(auth);
+  const [
+    signInWithEmailAndPassword,
+    emailUserLogin,
+    emailLoadingLogin,
+    emailErrorLogin,
+  ] = useSignInWithEmailAndPassword(auth);
 
   const handleChangeInput = (e) => {
     setForm({
@@ -50,6 +58,19 @@ const AuthForm = ({ type }) => {
         );
         if (newUser) router.push("/");
         if (!newUser) alert(emailErrorRegister);
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    //* LOGIN AUTH
+    if (type === "login") {
+      try {
+        const loginResult = await signInWithEmailAndPassword(
+          form.email,
+          form.password
+        );
+        console.log(loginResult);
       } catch (error) {
         alert(error);
       }
