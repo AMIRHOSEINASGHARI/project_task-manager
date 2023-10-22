@@ -10,7 +10,7 @@ import { IoIosMenu } from "react-icons/io";
 
 const Navbar = () => {
   return (
-    <header className="flex items-center justify-between p-3 sm:px-5">
+    <header className="flex items-center justify-between p-3 sm:px-5 fixed top-0 bg-white w-full z-10">
       <div className="flex items-center gap-5">
         <button type="button">
           <IoIosMenu className="text-4xl p-1 rounded-full hover:bg-gray-100" />
