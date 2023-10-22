@@ -7,6 +7,7 @@ import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
 //* React Icons
 import { TbLogout2 } from "react-icons/tb";
 import { IoFingerPrintOutline } from "react-icons/io5";
+import { Loader } from ".";
 
 const AuthSection = () => {
   const [user] = useAuthState(auth);
@@ -17,7 +18,11 @@ const AuthSection = () => {
       {user && (
         <div className="flex items-center gap-3 border-2 rounded-full px-1.5 py-0.5">
           <button type="button" onClick={() => signOut()}>
-            {loading_logout ? "Loading" : <TbLogout2 className="text-xl" />}
+            {loading_logout ? (
+              <Loader h={20} w={20} />
+            ) : (
+              <TbLogout2 className="text-xl" />
+            )}
           </button>
           <Image
             className="rounded-full"

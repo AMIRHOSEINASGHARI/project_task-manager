@@ -16,6 +16,7 @@ import {
   useSignInWithEmailAndPassword,
 } from "react-firebase-hooks/auth";
 import toast from "react-hot-toast";
+import { Loader } from "..";
 
 const AuthForm = ({ type }) => {
   const router = useRouter();
@@ -122,14 +123,20 @@ const AuthForm = ({ type }) => {
         </div>
         <button
           type="submit"
-          disabled={emailLoadingRegister}
-          className={`font-semibold text-sm w-full rounded-md py-2 mb-5 ${
-            emailLoadingRegister
+          disabled={emailLoadingRegister || emailLoadingLogin}
+          className={`font-semibold text-sm w-full rounded-md py-2 mb-5 flex justify-center ${
+            emailLoadingRegister || emailLoadingLogin
               ? "bg-gray-100 text-gray-500"
               : "bg-black text-white"
           }`}
         >
-          {type === "register" ? "Sign up" : "Log in"}
+          {emailLoadingLogin || emailLoadingRegister ? (
+            <Loader h={20} w={20} />
+          ) : type === "register" ? (
+            "Sign up"
+          ) : (
+            "Log in"
+          )}
         </button>
         <div className="flex items-center justify-between text-xs gap-3">
           <p>
