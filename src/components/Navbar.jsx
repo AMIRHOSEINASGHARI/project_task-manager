@@ -1,7 +1,11 @@
 "use client";
 
+//* Next
 import Image from "next/image";
 import Link from "next/link";
+//* Components
+import { AuthSection } from ".";
+//* React Icons
 import { IoIosMenu } from "react-icons/io";
 
 const Navbar = () => {
@@ -18,7 +22,7 @@ const Navbar = () => {
           </p>
         </Link>
       </div>
-      {/* //TODO: AuthSection component */}
+      <AuthSection />
     </header>
   );
 };
