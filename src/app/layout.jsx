@@ -2,7 +2,7 @@
 import "./globals.css";
 //* Components
 import { Toaster } from "react-hot-toast";
-import { Navbar } from "@/components";
+import { Navbar, Sidebar } from "@/components";
 
 export const metadata = {
   title: "Task Manager",
@@ -17,6 +17,7 @@ export default function RootLayout({ children }) {
           <Toaster position="top-center" reverseOrder={false} />
         </div>
         <Navbar />
+        <Sidebar />
         <main>{children}</main>
       </body>
     </html>
