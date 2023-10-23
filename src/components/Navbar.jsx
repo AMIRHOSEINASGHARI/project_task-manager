@@ -1,5 +1,7 @@
 "use client";
 
+//* React
+import { useContext } from "react";
 //* Next
 import Image from "next/image";
 import Link from "next/link";
@@ -7,12 +9,16 @@ import Link from "next/link";
 import { AuthSection } from ".";
 //* React Icons
 import { IoIosMenu } from "react-icons/io";
+//* Context
+import { MainContext } from "@/context/MainContextProvider";
 
 const Navbar = () => {
+  const { showMenu, setShowMenu } = useContext(MainContext);
+
   return (
     <header className="flex items-center justify-between p-3 sm:px-5 fixed top-0 bg-white w-full z-10">
       <div className="flex items-center gap-5">
-        <button type="button">
+        <button type="button" onClick={() => setShowMenu(!showMenu)}>
           <IoIosMenu className="text-4xl p-1 rounded-full hover:bg-gray-100" />
         </button>
         <Link href="/tasks/all" className="flex items-center gap-1">

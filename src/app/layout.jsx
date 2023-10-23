@@ -3,6 +3,8 @@ import "./globals.css";
 //* Components
 import { Toaster } from "react-hot-toast";
 import { Navbar, Sidebar } from "@/components";
+//* Context
+import MainContextProvider from "@/context/MainContextProvider";
 
 export const metadata = {
   title: "Task Manager",
@@ -12,14 +14,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>
-        <div>
-          <Toaster position="top-center" reverseOrder={false} />
-        </div>
-        <Navbar />
-        <Sidebar />
-        <main>{children}</main>
-      </body>
+      <MainContextProvider>
+        <body>
+          <div>
+            <Toaster position="top-center" reverseOrder={false} />
+          </div>
+          <Navbar />
+          <Sidebar />
+          <main>{children}</main>
+        </body>
+      </MainContextProvider>
     </html>
   );
 }
