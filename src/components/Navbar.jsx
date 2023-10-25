@@ -1,7 +1,7 @@
 "use client";
 
 //* React
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 //* Next
 import Image from "next/image";
 import Link from "next/link";
@@ -14,9 +14,17 @@ import { MainContext } from "@/context/MainContextProvider";
 
 const Navbar = () => {
   const { showMenu, setShowMenu } = useContext(MainContext);
+  const deviceWidth = useRef();
+
+  useEffect(() => {
+    if (deviceWidth.current.scrollWidth < 640) setShowMenu(false);
+  }, []);
 
   return (
-    <header className="flex items-center justify-between p-3 sm:px-5 fixed top-0 bg-white w-full z-10">
+    <header
+      ref={deviceWidth}
+      className="flex items-center justify-between p-3 sm:px-5 fixed top-0 bg-white w-full z-10"
+    >
       <div className="flex items-center gap-5">
         <button type="button" onClick={() => setShowMenu(!showMenu)}>
           <IoIosMenu className="text-4xl p-1 rounded-full hover:bg-gray-100" />
