@@ -21,7 +21,7 @@ const AuthSection = () => {
             {loading_logout ? (
               <Loader h={20} w={20} />
             ) : (
-              <TbLogout2 className="text-xl" />
+              <TbLogout2 className="text-2xl text-white" />
             )}
           </button>
           <Image
@@ -37,10 +37,10 @@ const AuthSection = () => {
       {!user && (
         <Link
           href="/login"
-          className="flex items-center gap-2 rounded-full py-1 px-3 border-2 hover:bg-gray-100"
+          className="flex items-center gap-2 rounded-full py-1 px-3 border-2 text-white hover:bg-blue-400 transition duration-100"
         >
           <IoFingerPrintOutline className="text-xl" />
-          <p className="font-bold text-gray-600">Sign in</p>
+          <p className="font-bold">Sign in</p>
         </Link>
       )}
     </>

@@ -23,17 +23,21 @@ const Navbar = () => {
   return (
     <header
       ref={deviceWidth}
-      className="flex items-center justify-between p-3 sm:px-5 fixed top-0 bg-white w-full z-10"
+      className="flex items-center justify-between p-3 sm:px-5 fixed top-0 bg-blue-500 w-full z-10"
     >
       <div className="flex items-center gap-5">
         <button type="button" onClick={() => setShowMenu(!showMenu)}>
-          <IoIosMenu className="text-4xl p-1 rounded-full hover:bg-gray-100" />
+          <IoIosMenu className="text-4xl p-1 rounded-full hover:bg-blue-400 text-white" />
         </button>
         <Link href="/tasks/all" className="flex items-center gap-1">
-          <Image src="/logo.svg" width={25} height={25} alt="to do" priority />
-          <p className="font-bold tracking-tight text-blue-500 text-sm">
-            To Do
-          </p>
+          <Image
+            src="/logo-white.svg"
+            width={25}
+            height={25}
+            alt="to do"
+            priority
+          />
+          <p className="font-bold tracking-tight text-white text-sm">To Do</p>
         </Link>
       </div>
       <AuthSection />
