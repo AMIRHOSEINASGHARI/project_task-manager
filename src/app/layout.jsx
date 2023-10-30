@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
           </div>
           <Navbar />
           <Sidebar />
-          <main>{children}</main>
+          <main className="bg-gray-50">{children}</main>
         </body>
       </MainContextProvider>
     </html>

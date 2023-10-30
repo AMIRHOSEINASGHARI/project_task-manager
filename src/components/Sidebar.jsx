@@ -18,7 +18,7 @@ const Sidebar = () => {
     return null;
 
   return (
-    <aside className="bg-white flex flex-col fixed top-[60px] z-10 h-screen">
+    <aside className="bg-white shadow flex flex-col fixed top-[60px] z-10 h-screen">
       {menuList.map((item) => (
         <Link
           key={item.name}

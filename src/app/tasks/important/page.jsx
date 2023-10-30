@@ -8,7 +8,7 @@ const Important = () => {
   const { showMenu } = useContext(MainContext);
   return (
     <div
-      className={`mt-[70px] ${
+      className={`mt-[60px] pt-[10px] min-h-screen ${
         showMenu ? "pl-[260px]" : "pl-[70px] sm:pl-[90px]"
       }`}
     >
