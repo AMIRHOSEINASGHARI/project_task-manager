@@ -7,7 +7,7 @@ import { MainContext } from "@/context/MainContextProvider";
 import { PiInfinityLight } from "react-icons/pi";
 import { BsPlusLg } from "react-icons/bs";
 //* Components
-import { TextField } from "@/components";
+import { CustomButton, TextField } from "@/components";
 
 const All = () => {
   const { showMenu } = useContext(MainContext);
@@ -16,6 +16,9 @@ const All = () => {
   const changeHandler = (e) => {
     setInputValue(e.target.value);
   };
+
+  //TODO: submit task input
+  const handleSubmitTask = (e) => {};
 
   return (
     <div
@@ -29,15 +32,24 @@ const All = () => {
         </div>
         <p className="text-lg font-bold">All</p>
       </div>
-      <TextField
-        name="add"
-        type="text"
-        placeholder="Add a task here"
-        inputValue={inputValue}
-        changeHandler={changeHandler}
-        containerStyles="shadow rounded-sm flex items-center gap-3"
-        containerIcon={<BsPlusLg className="text-blue-500 text-lg ml-5" />}
-      />
+      <form onSubmit={handleSubmitTask}>
+        <TextField
+          name="add"
+          type="text"
+          placeholder="Add a task here"
+          inputValue={inputValue}
+          changeHandler={changeHandler}
+          containerStyles="shadow rounded-sm flex items-center gap-3"
+          containerIcon={<BsPlusLg className="text-blue-500 text-lg ml-5" />}
+        />
+        <div>
+          <CustomButton
+            type="submit"
+            title="Add"
+            containerStyles="border bg-gray-100 px-4 py-1.5 rounded-md text-sm font-light mt-2"
+          />
+        </div>
+      </form>
     </div>
   );
 };
