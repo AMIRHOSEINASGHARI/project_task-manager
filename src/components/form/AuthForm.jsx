@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 //* React Icons
 import { FcGoogle } from "react-icons/fc";
 //* Firebase
-import { auth } from "@/firebase";
+import { auth, db } from "@/firebase";
+import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
 //* Firebase-hooks
 import {
   useSignInWithGoogle,
@@ -60,6 +61,13 @@ const AuthForm = ({ type }) => {
           form.email,
           form.password
         );
+        const userData = {
+          uid: newUser?.user?.uid,
+          email: newUser?.user?.email,
+          photoURL: newUser?.user?.photoURL,
+          todos: {},
+        };
+        await useAddUserDoc(userData);
         if (newUser) router.push("/");
         if (!newUser) toast.error(emailErrorRegister);
       } catch (error) {
@@ -81,6 +89,18 @@ const AuthForm = ({ type }) => {
     }
   };
 
+  const googleRegister = async () => {
+    const newUser = await signInWithGoogle();
+    const userData = {
+      uid: newUser?.user?.uid,
+      email: newUser?.user?.email,
+      photoURL: newUser?.user?.photoURL,
+      todos: {},
+    };
+    await useAddUserDoc(userData);
+    if (newUser) router.push("/tasks/all");
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen relative">
       <form
@@ -90,7 +110,7 @@ const AuthForm = ({ type }) => {
         <h1 className="text-5xl font-black text-gray-600 mb-10">Welcome</h1>
         <button
           type="button"
-          onClick={() => signInWithGoogle()}
+          onClick={googleRegister}
           className="flex items-center justify-center gap-3 rounded-md shadow-md shadow-gray-200 py-2 w-full"
         >
           <FcGoogle />
@@ -157,3 +177,18 @@ const AuthForm = ({ type }) => {
 };
 
 export default AuthForm;
+
+export const useAddUserDoc = async (userData) => {
+  try {
+    const userRef = doc(db, "users", userData.uid);
+    const userSnapShot = await getDoc(userRef);
+    if (userSnapShot._document) {
+      return null;
+    } else {
+      await setDoc(doc(db, "users", userData.uid), userData);
+      return;
+    }
+  } catch (error) {
+    alert("Try again later");
+  }
+};
