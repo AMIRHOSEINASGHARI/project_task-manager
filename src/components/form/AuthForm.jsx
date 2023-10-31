@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 //* Firebase
 import { auth, db } from "@/firebase";
-import { addDoc, collection, doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 //* Firebase-hooks
 import {
   useSignInWithGoogle,
@@ -70,7 +70,13 @@ const AuthForm = ({ type }) => {
             groups: [],
           },
         };
-        await useAddUserDoc(userData);
+        const userRef = doc(db, "users", userData.uid);
+        const userSnapShot = await getDoc(userRef);
+        if (userSnapShot._document) {
+          return null;
+        } else {
+          await setDoc(doc(db, "users", userData.uid), userData);
+        }
         if (!emailErrorRegister) router.push("/tasks/all");
       } catch (error) {
         toast.error("بعدا امتحان کنید");
@@ -99,7 +105,13 @@ const AuthForm = ({ type }) => {
         groups: [],
       },
     };
-    await useAddUserDoc(userData);
+    const userRef = doc(db, "users", userData.uid);
+    const userSnapShot = await getDoc(userRef);
+    if (userSnapShot._document) {
+      return null;
+    } else {
+      await setDoc(doc(db, "users", userData.uid), userData);
+    }
     if (newUser) router.push("/tasks/all");
   };
 
@@ -189,18 +201,3 @@ const AuthForm = ({ type }) => {
 };
 
 export default AuthForm;
-
-export const useAddUserDoc = async (userData) => {
-  try {
-    const userRef = doc(db, "users", userData.uid);
-    const userSnapShot = await getDoc(userRef);
-    if (userSnapShot._document) {
-      return null;
-    } else {
-      await setDoc(doc(db, "users", userData.uid), userData);
-      return;
-    }
-  } catch (error) {
-    toast.error("Try again later");
-  }
-};

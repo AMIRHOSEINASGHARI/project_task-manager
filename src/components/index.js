@@ -5,6 +5,7 @@ import Loader from "./Loader";
 import Sidebar from "./Sidebar";
 import TextField from "./TextField";
 import CustomButton from "./CustomButton";
+import Tasks from "./Tasks";
 
 export {
   AuthForm,
@@ -14,4 +15,5 @@ export {
   Sidebar,
   TextField,
   CustomButton,
+  Tasks,
 };

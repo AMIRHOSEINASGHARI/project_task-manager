@@ -1,33 +1,72 @@
 "use client";
 
 //* React
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context/MainContextProvider";
+//* Next
+import { useRouter } from "next/navigation";
 //* React Icons
 import { PiInfinityLight } from "react-icons/pi";
 import { BsPlusLg } from "react-icons/bs";
 //* Components
-import { CustomButton, TextField } from "@/components";
+import { CustomButton, Tasks, TextField } from "@/components";
+import toast from "react-hot-toast";
 //* firebase
-import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "@/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+//* Utility functions
 import { generateUniqueId } from "@/utils";
 
 const All = () => {
   const { showMenu } = useContext(MainContext);
   const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
+  const [todos, setTodos] = useState(null);
 
   const changeHandler = (e) => {
     setInputValue(e.target.value);
   };
 
-  //TODO: submit task input
   const handleSubmitTask = async (e) => {
     e.preventDefault();
+    if (!inputValue) {
+      toast.error("Invalid field!");
+    } else {
+      try {
+        setLoading(true);
+        const userDoc = doc(db, "users", user?.uid);
+        await updateDoc(userDoc, {
+          "todos.tasks": arrayUnion({
+            id: generateUniqueId(),
+            title: inputValue,
+            note: "",
+            completed: false,
+            important: false,
+            category: [],
+          }),
+        });
+        setInputValue("");
+        setLoading(false);
+        fetchTodos();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
-    await useAddTask(inputValue, user.uid);
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    const userDoc = doc(db, "users", user?.uid);
+    const docSnap = await getDoc(userDoc);
+    if (docSnap.exists()) {
+      setTodos(docSnap.data().todos);
+    }
   };
 
   return (
@@ -55,28 +94,16 @@ const All = () => {
         <div>
           <CustomButton
             type="submit"
-            title="Add"
+            title={loading ? "loading" : "Add"}
             containerStyles="border bg-gray-100 px-4 py-1.5 rounded-md text-sm font-light mt-2"
           />
         </div>
       </form>
+      <section>
+        <Tasks todos={todos} />
+      </section>
     </div>
   );
 };
 
 export default All;
-
-const useAddTask = async (title, userId) => {
-  const userDoc = doc(db, "users", userId);
-  await updateDoc(userDoc, {
-    "todos.tasks": arrayUnion({
-      id: generateUniqueId(),
-      title: title,
-      note: "",
-      completed: false,
-      important: false,
-      category: [],
-    }),
-  });
-  return;
-};
