@@ -8,17 +8,27 @@ import { PiInfinityLight } from "react-icons/pi";
 import { BsPlusLg } from "react-icons/bs";
 //* Components
 import { CustomButton, TextField } from "@/components";
+//* firebase
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { auth, db } from "@/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { generateUniqueId } from "@/utils";
 
 const All = () => {
   const { showMenu } = useContext(MainContext);
   const [inputValue, setInputValue] = useState("");
+  const [user] = useAuthState(auth);
 
   const changeHandler = (e) => {
     setInputValue(e.target.value);
   };
 
   //TODO: submit task input
-  const handleSubmitTask = (e) => {};
+  const handleSubmitTask = async (e) => {
+    e.preventDefault();
+
+    await useAddTask(inputValue, user.uid);
+  };
 
   return (
     <div
@@ -55,3 +65,18 @@ const All = () => {
 };
 
 export default All;
+
+const useAddTask = async (title, userId) => {
+  const userDoc = doc(db, "users", userId);
+  await updateDoc(userDoc, {
+    "todos.tasks": arrayUnion({
+      id: generateUniqueId(),
+      title: title,
+      note: "",
+      completed: false,
+      important: false,
+      category: [],
+    }),
+  });
+  return;
+};

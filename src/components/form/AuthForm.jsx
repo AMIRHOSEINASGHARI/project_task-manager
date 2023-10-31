@@ -65,7 +65,10 @@ const AuthForm = ({ type }) => {
           uid: newUser?.user?.uid,
           email: newUser?.user?.email,
           photoURL: newUser?.user?.photoURL,
-          todos: {},
+          todos: {
+            tasks: [],
+            groups: [],
+          },
         };
         await useAddUserDoc(userData);
         if (!emailErrorRegister) router.push("/tasks/all");
@@ -84,14 +87,17 @@ const AuthForm = ({ type }) => {
       }
     }
   };
-  console.log(emailErrorLogin);
+
   const googleRegister = async () => {
     const newUser = await signInWithGoogle();
     const userData = {
       uid: newUser?.user?.uid,
       email: newUser?.user?.email,
       photoURL: newUser?.user?.photoURL,
-      todos: {},
+      todos: {
+        tasks: [],
+        groups: [],
+      },
     };
     await useAddUserDoc(userData);
     if (newUser) router.push("/tasks/all");
