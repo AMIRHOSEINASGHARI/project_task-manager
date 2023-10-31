@@ -1,7 +1,7 @@
 "use client";
 
 //* React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 //* Next
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -68,27 +68,23 @@ const AuthForm = ({ type }) => {
           todos: {},
         };
         await useAddUserDoc(userData);
-        if (newUser) router.push("/");
-        if (!newUser) toast.error(emailErrorRegister);
+        if (!emailErrorRegister) router.push("/tasks/all");
       } catch (error) {
-        toast.error(error.message);
+        toast.error("بعدا امتحان کنید");
       }
     }
 
     //* LOGIN AUTH
     if (type === "login") {
       try {
-        const loginResult = await signInWithEmailAndPassword(
-          form.email,
-          form.password
-        );
-        if (!loginResult) toast.error(emailErrorLogin.message);
+        await signInWithEmailAndPassword(form.email, form.password);
+        if (!emailErrorLogin) router.push("/tasks/all");
       } catch (error) {
-        toast.error(emailErrorLogin.message);
+        toast.error("بعدا امتحان کنید");
       }
     }
   };
-
+  console.log(emailErrorLogin);
   const googleRegister = async () => {
     const newUser = await signInWithGoogle();
     const userData = {
@@ -100,6 +96,16 @@ const AuthForm = ({ type }) => {
     await useAddUserDoc(userData);
     if (newUser) router.push("/tasks/all");
   };
+
+  useEffect(() => {
+    if (emailErrorRegister?.message.includes("email-already-in-use")) {
+      toast.error("ایمیل قبلا ثبت شده");
+    }
+
+    if (emailErrorLogin?.message.includes("invalid-login-credentials")) {
+      toast.error("رمز عبور یا ایمیل درست نیست");
+    }
+  }, [googleError, emailErrorRegister, emailErrorLogin]);
 
   return (
     <div className="flex items-center justify-center min-h-screen relative">
@@ -189,6 +195,6 @@ export const useAddUserDoc = async (userData) => {
       return;
     }
   } catch (error) {
-    alert("Try again later");
+    toast.error("Try again later");
   }
 };
