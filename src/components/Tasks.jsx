@@ -1,3 +1,12 @@
+"use client";
+
+//* Next
+import Link from "next/link";
+//* React Icons
+import { GoCircle, GoCheckCircleFill } from "react-icons/go";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+
 const Tasks = ({ todos }) => {
   if (todos === null) {
     return "LOADING...";
@@ -5,7 +14,30 @@ const Tasks = ({ todos }) => {
     return (
       <>
         {todos?.tasks.map((task) => (
-          <h1 key={task.id}>{task.title}</h1>
+          <div
+            key={task.id}
+            className="flex items-center gap-6 w-full bg-white shadow rounded py-2 px-5"
+          >
+            <button className="text-xl text-blue-600">
+              <GoCircle />
+            </button>
+            <div className="flex items-center justify-between w-full">
+              <Link
+                href={`/tasks/id/${task.id}`}
+                className="font-light text-sm w-full py-2 mr-2"
+              >
+                {task.title}
+              </Link>
+              <div className="flex items-center gap-2">
+                <button className="p-2 text-blue-500 hover:bg-gray-100 rounded-full">
+                  <PiDotsThreeOutlineVerticalFill />
+                </button>
+                <button className="text-xl text-blue-600">
+                  <AiOutlineStar />
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
       </>
     );

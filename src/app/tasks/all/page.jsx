@@ -91,7 +91,7 @@ const All = () => {
           containerStyles="shadow rounded-sm flex items-center gap-3"
           containerIcon={<BsPlusLg className="text-blue-500 text-lg ml-5" />}
         />
-        <div>
+        <div className="mb-10">
           <CustomButton
             type="submit"
             title={loading ? "loading" : "Add"}
@@ -99,7 +99,7 @@ const All = () => {
           />
         </div>
       </form>
-      <section>
+      <section className="w-full space-y-3">
         <Tasks todos={todos} />
       </section>
     </div>
