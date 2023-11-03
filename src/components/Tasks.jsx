@@ -6,10 +6,11 @@ import Link from "next/link";
 import { GoCircle, GoCheckCircleFill } from "react-icons/go";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+import { Loader } from ".";
 
 const Tasks = ({ todos }) => {
   if (todos === null) {
-    return "LOADING...";
+    return <Loader h={30} w={30} containerStyles="mt-10" />;
   } else if (todos?.tasks?.length !== 0) {
     return (
       <>

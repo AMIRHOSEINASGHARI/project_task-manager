@@ -3,13 +3,11 @@
 //* React
 import { useContext, useEffect, useState } from "react";
 import { MainContext } from "@/context/MainContextProvider";
-//* Next
-import { useRouter } from "next/navigation";
 //* React Icons
 import { PiInfinityLight } from "react-icons/pi";
 import { BsPlusLg } from "react-icons/bs";
 //* Components
-import { CustomButton, Tasks, TextField } from "@/components";
+import { CustomButton, Loader, Tasks, TextField } from "@/components";
 import toast from "react-hot-toast";
 //* firebase
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
@@ -21,10 +19,21 @@ import { generateUniqueId } from "@/utils";
 const All = () => {
   const { showMenu } = useContext(MainContext);
   const [inputValue, setInputValue] = useState("");
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [user] = useAuthState(auth);
   const [todos, setTodos] = useState(null);
+
+  const fetchTodos = async () => {
+    const userDoc = doc(db, "users", user?.email);
+    const docSnap = await getDoc(userDoc);
+    if (docSnap.exists()) {
+      setTodos(docSnap.data().todos);
+    }
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
 
   const changeHandler = (e) => {
     setInputValue(e.target.value);
@@ -37,7 +46,7 @@ const All = () => {
     } else {
       try {
         setLoading(true);
-        const userDoc = doc(db, "users", user?.uid);
+        const userDoc = doc(db, "users", user?.email);
         await updateDoc(userDoc, {
           "todos.tasks": arrayUnion({
             id: generateUniqueId(),
@@ -54,18 +63,6 @@ const All = () => {
       } catch (error) {
         console.log(error);
       }
-    }
-  };
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  const fetchTodos = async () => {
-    const userDoc = doc(db, "users", user?.uid);
-    const docSnap = await getDoc(userDoc);
-    if (docSnap.exists()) {
-      setTodos(docSnap.data().todos);
     }
   };
 
@@ -94,7 +91,7 @@ const All = () => {
         <div className="mb-10">
           <CustomButton
             type="submit"
-            title={loading ? "loading" : "Add"}
+            title={loading ? <Loader h={20} w={20} /> : "Add"}
             containerStyles="border bg-gray-100 px-4 py-1.5 rounded-md text-sm font-light mt-2"
           />
         </div>

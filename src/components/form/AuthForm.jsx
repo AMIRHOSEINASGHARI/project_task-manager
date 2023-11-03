@@ -62,7 +62,7 @@ const AuthForm = ({ type }) => {
           form.password
         );
         const userData = {
-          uid: newUser?.user?.uid,
+          uid: newUser?.user?.email,
           email: newUser?.user?.email,
           photoURL: newUser?.user?.photoURL,
           todos: {
@@ -97,7 +97,7 @@ const AuthForm = ({ type }) => {
   const googleRegister = async () => {
     const newUser = await signInWithGoogle();
     const userData = {
-      uid: newUser?.user?.uid,
+      uid: newUser?.user?.email,
       email: newUser?.user?.email,
       photoURL: newUser?.user?.photoURL,
       todos: {
